@@ -13,5 +13,8 @@ main = do
   print $ parseMessage "I 29 la la la"
   print $ parseMessage "This is not in the right format"
 
-  logMessages <- testParse parse 10 "error.log"
+  logMessages <- testParse parse 10 "sample.log"
   print logMessages
+  print "Kupa"
+
+  print $ whatWentWrong $ inOrder $ build logMessages

@@ -34,12 +34,9 @@ parse n =
 
 insert :: LogMessage -> MessageTree -> MessageTree
 insert msg Leaf = Node Leaf msg Leaf
-insert msg@(LogMessage _ n _) (Node left (LogMessage _ m _) right)
-  | n < m = insert msg left
-  | otherwise = insert msg right
-insert msg@(LogMessage _ n _) (Leaf left (LogMessage _ m _) right)
-  | n < m = insert msg left
-  | otherwise = insert msg right
+insert msg@(LogMessage _ n _) (Node left log@(LogMessage _ m _) right)
+  | n < m = Node (insert msg left) log right
+  | otherwise = Node left log (insert msg right)
 insert _ tree = tree
 
 build :: [LogMessage] -> MessageTree
@@ -48,8 +45,11 @@ build (x : xs) = insert x (build xs)
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
-inOrder (Node _ _ _) (LogMessage _ _ _) (Node _ _ _) = 
-  | 
+inOrder (Node left msg right) = inOrder left ++ [msg] ++ inOrder right
 
-
-
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong [] = []
+whatWentWrong ((LogMessage (Error lev) _ text) : xs)
+  | lev >= 50 = text : whatWentWrong xs
+  | otherwise = whatWentWrong xs
+whatWentWrong (_ : xs) = whatWentWrong xs
