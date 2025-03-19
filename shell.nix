@@ -1,8 +1,10 @@
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.mkShell {
-    buildInputs = [
-        pkgs.ghc
-    ];
+  buildInputs = [
+    pkgs.ghc
+    pkgs.haskell-language-server
+  ];
 }
-
